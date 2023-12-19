@@ -36,7 +36,7 @@ describe("transfer spl tokens", () => {
     name: "nicoindem",
     symbol: "NCM",
     uri:
-      "https://github.com/NikodemMarek/rustchain-transfer-tokens-spl/blob/main/token-metadata.json",
+      "https://raw.githubusercontent.com/NikodemMarek/rustchain-transfer-tokens-spl/main/token-metadata.json",
   };
 
   const payer = provider.wallet as anchor.Wallet;
@@ -115,4 +115,3 @@ describe("transfer spl tokens", () => {
     console.log(`transfered: ${res}`);
   });
 });
-
