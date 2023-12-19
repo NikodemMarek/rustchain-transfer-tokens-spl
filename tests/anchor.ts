@@ -5,16 +5,16 @@ import { PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mp
 import * as anchor from "@coral-xyz/anchor";
 import { TransferTokensSpl } from "../target/types/transfer_tokens_spl";
 import {
-  PublicKey,
   Keypair,
-  SYSVAR_RENT_PUBKEY,
+  PublicKey,
   SystemProgram,
+  SYSVAR_RENT_PUBKEY,
 } from "@solana/web3.js";
 import {
-  getAssociatedTokenAddressSync,
   ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAccount,
+  getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
-  getAccount
 } from "@solana/spl-token";
 import type { Instructions } from "../target/types/instructions";
 
@@ -23,29 +23,32 @@ describe("transfer spl tokens", () => {
   anchor.setProvider(anchor.AnchorProvider.env());
 
   const program = anchor.workspace.Instructions as anchor.Program<Instructions>;
-  
+
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
-  const program = anchor.workspace.TransferTokensSpl as anchor.Program<TransferTokensSpl>;
+  const program = anchor.workspace.TransferTokensSpl as anchor.Program<
+    TransferTokensSpl
+  >;
 
   const mintKeypair = new Keypair();
 
   const metadata = {
     name: "nicoindem",
     symbol: "NCM",
-    uri: "nothing to see here",
+    uri:
+      "https://github.com/NikodemMarek/rustchain-transfer-tokens-spl/blob/main/token-metadata.json",
   };
 
   const payer = provider.wallet as anchor.Wallet;
   const senderTokenAddress = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    payer.publicKey
+    payer.publicKey,
   );
 
   const recipient = new Keypair();
   const recepientTokenAddress = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    recipient.publicKey
+    recipient.publicKey,
   );
 
   it("create", async () => {
@@ -55,7 +58,7 @@ describe("transfer spl tokens", () => {
         TOKEN_METADATA_PROGRAM_ID.toBuffer(),
         mintKeypair.publicKey.toBuffer(),
       ],
-      TOKEN_METADATA_PROGRAM_ID
+      TOKEN_METADATA_PROGRAM_ID,
     );
 
     await program.methods
@@ -112,3 +115,4 @@ describe("transfer spl tokens", () => {
     console.log(`transfered: ${res}`);
   });
 });
+
